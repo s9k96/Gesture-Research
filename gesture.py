@@ -14,8 +14,7 @@ while(cap.isOpened()):
                                cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
     cv2.imshow('Thresholded', thresh1)
 
-    image, contours, hierarchy = cv2.findContours(thresh1.copy(), \
-               cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    image, contours, hierarchy = cv2.findContours(thresh1.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     cnt = max(contours, key = lambda x: cv2.contourArea(x))
     
@@ -45,17 +44,15 @@ while(cap.isOpened()):
         cv2.line(crop_img,start,end,[0,255,0],2)
         #cv2.circle(crop_img,far,5,[0,0,255],-1)
     if count_defects == 1:
-        cv2.putText(img,"I am Vipul", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img,"Nothing NADA", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     elif count_defects == 2:
-        str = "This is a basic hand gesture recognizer"
-        cv2.putText(img, str, (5,50), cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
+        cv2.putText(img, "something", (5,50), cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
     elif count_defects == 3:
-        cv2.putText(img,"This is 4 :P", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img,"This is 4 ", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     elif count_defects == 4:
-        cv2.putText(img,"Hi!!!", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img,"5 in fifth", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     else:
-        cv2.putText(img,"Hello World!!!", (50,50),\
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img,"Can't see anything :(", (50,50),cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     #cv2.imshow('drawing', drawing)
     #cv2.imshow('end', crop_img)
     cv2.imshow('Gesture', img)
