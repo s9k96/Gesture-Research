@@ -11,13 +11,16 @@ endx, endy = -1, -1
 counter = 0
 grabbed = False
 channel_value = 0
+selected_channel = 0
 vertical_slider_value = 0
+horizontal_slider_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 while cap.isOpened():
     _, frame = cap.read()
     frame1 = frame.copy()
     cv2.putText(frame, str(channel_value), (1, 50), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 2, cv2.LINE_AA)
-    cv2.putText(frame, str(vertical_slider_value), (1, 100), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(frame, str(selected_channel), (1, 100), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(frame, str(horizontal_slider_values[selected_channel]), (1, 150), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 2, cv2.LINE_AA)
     gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     hand = hand_cascade.detectMultiScale(gray, 1.3, 5)
@@ -29,18 +32,18 @@ while cap.isOpened():
 
         endx, endy = x, y
 
-        if startx > 0:
-            temp = y - starty
-            if temp > 0:
-                temp %= 200
-                channel_value -= 1
-            else:
-                temp %= 200
-                channel_value += 1
-            if channel_value < 0:
-                channel_value = 0
-            if channel_value > 20:
-                channel_value = 20
+    if startx > 0:
+        channel_value = (y - starty) / 100
+
+    if counter == 5:
+        selected_channel += channel_value
+    if selected_channel < 1:
+        selected_channel = 1
+    if selected_channel > 10:
+        selected_channel = 10
+
+    if (endx - startx) > 10:
+        horizontal_slider_values[selected_channel] = (endx - startx) / 50
 
     print (endx, endy, startx, starty, counter)
     #print ("startx = ", startx, "starty= ", starty)
@@ -50,10 +53,10 @@ while cap.isOpened():
         startx = -1
         starty = -1
     cv2.imshow('temp', frame)
-    k = cv2.waitKey(10)
-    if k == 27:
-        break
 
+    k = cv2.waitKey(10)
+    if k == 27 & 0xFF:
+        break
 
 cap.release()
 cv2.destroyAllWindows()
