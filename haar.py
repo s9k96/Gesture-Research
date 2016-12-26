@@ -18,7 +18,6 @@ diffy = 0
 while cap.isOpened():
     _, frame = cap.read()
     frame1 = frame.copy()
-    cv2.putText(frame, str(temperature + (diffx / 50)), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,255,255),2,cv2.LINE_AA)
     gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     hand = hand_cascade.detectMultiScale(gray, 1.3, 5)
@@ -31,11 +30,20 @@ while cap.isOpened():
         endx, endy = x, y
     diffx = endx - startx
     diffy = endy - starty
+    print   startx, endx, abs(endx-startx)/50
+###############################################################################
+    if abs(startx-endx)>30:
+        diffx=startx-endx
+    cv2.putText(frame, str(abs(diffx)/50), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
+    
+    cv2.putText(frame, str(abs(endy-starty)/50), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
+
 ###################################
     if counter == 5:
-    	temperature += diffx / 50
+    	
+        temperature += diffx / 50
 ###################################
-    print (endx, endy, startx, starty, counter)
+    # print (endx, endy, startx, starty, counter)
     #print ("startx = ", startx, "starty= ", starty)
     counter += 1
     #print (startx, starty)
