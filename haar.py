@@ -34,9 +34,10 @@ while cap.isOpened():
 ###############################################################################
     if abs(startx-endx)>30:
         diffx=startx-endx
-    cv2.putText(frame, str(abs(diffx)/50), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
-    
-    cv2.putText(frame, str(abs(endy-starty)/50), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
+    cv2.putText(frame, str(abs(diffx)/30), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
+    if abs(starty-endy)>30:
+        diffy=starty-endy
+    cv2.putText(frame, str(abs(endy-starty)/30), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
 
 ###################################
     if counter == 5:
