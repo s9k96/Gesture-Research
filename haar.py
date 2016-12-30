@@ -4,18 +4,6 @@ import math
 import os
 import csv
 
-def replace(line_num, text):
-    lines=open('params.csv','r').readlines()
-    lines[line_num]=text
-    out=open('params.csv', 'w')
-    out.write(lines)
-    out.close()
-
-
-
-
-
-
 hand_cascade = cv2.CascadeClassifier('hand.xml')
 
 cap = cv2.VideoCapture(0)
@@ -64,10 +52,6 @@ while cap.isOpened():
         string= 'KEY_TEMP_UP 17 34 NIL NIL '+ str(abs(diffy/70))
         data[1]= string
         print data
-
-
-    # lines=open('param.csv','r').readlines()
-    # lines[3]=string
     out=open('params.csv', 'w+')
     out.write(str(data))
     out.close()
