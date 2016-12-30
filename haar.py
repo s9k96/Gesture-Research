@@ -2,20 +2,40 @@ import cv2
 import numpy as np
 import math
 import os
+import csv
+
+def replace(line_num, text):
+    lines=open('params.csv','r').readlines()
+    lines[line_num]=text
+    out=open('params.csv', 'w')
+    out.write(lines)
+    out.close()
+
+
+
+
+
 
 hand_cascade = cv2.CascadeClassifier('hand.xml')
 
 cap = cv2.VideoCapture(0)
 
+
 startx, starty = -1, -1
 endx, endy = -1, -1
 counter = 0
 grabbed = False
-temperature = 0
 diffx = 0
 diffy = 0
-
+channel=0
 while cap.isOpened():
+    data=['KEY_POWER 0 1 NIL NIL 0 ', 
+    'KEY_TEMP_UP 17 34 NIL NIL 17', 
+    'KEY_TEMP_DOWN 17 34 NIL NIL 34', 
+    'KEY_DIRECT 0 1 NIL NIL 0', 
+    'KEY_FAN 0 1 NIL NIL 0']
+
+
     _, frame = cap.read()
     frame1 = frame.copy()
     gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
@@ -26,28 +46,33 @@ while cap.isOpened():
         counter = 0
         if startx < 0 and starty < 0:
             startx, starty = x, y
-
         endx, endy = x, y
     diffx = endx - startx
     diffy = endy - starty
-    print   startx, endx, abs(endx-startx)/50
-###############################################################################
-    if abs(startx-endx)>30:
-        diffx=startx-endx
-    cv2.putText(frame, str(abs(diffx)/30), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
-    if abs(starty-endy)>30:
-        diffy=starty-endy
-    cv2.putText(frame, str(abs(endy-starty)/30), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,0,255),2,cv2.LINE_AA)
 
-###################################
-    if counter == 5:
-    	
-        temperature += diffx / 50
-###################################
-    # print (endx, endy, startx, starty, counter)
-    #print ("startx = ", startx, "starty= ", starty)
+
+    if counter==5 and abs(diffx)>100:
+        if(endx-startx)>0:
+            channel -=1
+        else:
+            channel +=1    
+    cv2.putText(frame, str(channel), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 3,(255,200,255),2,cv2.LINE_AA)
+
+    if channel==1:
+        cv2.putText(frame, 'channel 1: volume', (450, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,(20,0,255),2,cv2.LINE_AA)
+        cv2.putText(frame, str(abs(diffy/70)), (450, 130), cv2.FONT_HERSHEY_SIMPLEX, 1,(200,200,255),2,cv2.LINE_AA)
+        string= 'KEY_TEMP_UP 17 34 NIL NIL '+ str(abs(diffy/70))
+        data[1]= string
+        print data
+
+
+    # lines=open('param.csv','r').readlines()
+    # lines[3]=string
+    out=open('params.csv', 'w+')
+    out.write(str(data))
+    out.close()
+
     counter += 1
-    #print (startx, starty)
     if counter > 10:
         startx = -1
         starty = -1
