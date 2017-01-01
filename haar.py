@@ -5,9 +5,7 @@ import os
 import csv
 
 hand_cascade = cv2.CascadeClassifier('hand.xml')
-
 cap = cv2.VideoCapture(0)
-
 
 startx, starty = -1, -1
 endx, endy = -1, -1
@@ -68,3 +66,4 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+
